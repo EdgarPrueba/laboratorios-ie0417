@@ -11,13 +11,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
 
     - name: Set up CMake
       uses: lukka/get-cmake@v3.21.2
 
     - name: Install dependencies
-      run: sudo apt-get update && sudo apt-get install -y build-essential libgtest-dev
+      run: sudo apt-get update && sudo apt-get install -y build-essential
 
     - name: Build and run tests
       run: |
@@ -26,14 +26,14 @@ jobs:
         cmake ..
         make
         ./test_calculator
-        ./test_athentication
+        ./test_authentication
 
   deploy:
     needs: build
     runs-on: ubuntu-latest
     steps:
     - name: Checkout code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
 
     - name: Deploy to production
       run: echo "Deploying to production server"

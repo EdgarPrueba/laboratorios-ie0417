@@ -2,12 +2,15 @@
 **Escuela de Ingeniería Eléctrica**  
 **IE-0417 – Diseño de Software para Ingeniería**  
 **Laboratorio 7: Depuración, gdb, valgrind**  
-**Integrantes: Diego Alfaro (C20259), Edgar Alvarado (C10351), Jean Zuñiga (C18767)** 
+**Integrantes:**  
+- Diego Alfaro (C20259)  
+- Edgar Alvarado (C10351)  
+- Jean Zuñiga (C18767)  
 ---
 
 ## Concepto general: Depuración de errores 🔍
 
-Proceso de identificar y eliminar errores o fallos en un programa de software. Se usan las siguientes herramientas para realizar la depuración:
+El laboratorio consiste en estudiar el proceso de identificar y eliminar errores o fallos en un programa de software, llamado depuración de errores. Se usan las siguientes herramientas para realizar la depuración, y se muestran ejemplos de su ejecución en distintas situaciones:
 
 - [gdb (GNU Debugger)](#gdb-gnu-debugger)
 - [Valgrind](#valgrind)
@@ -15,13 +18,9 @@ Proceso de identificar y eliminar errores o fallos en un programa de software. S
 - [ThreadSanitizer (TSan)](#threadsanitizer-tsan)
 - [Helgrind](#helgrind)
 
----
+### Tipos de errores 📝
 
-## Conceptos
-
-### Tipos de errores
-
-Se tienen 3 tipos de errores principales, mostrados en el código. Estos generan errores en compilación y runtime, muestran las distintas formas en las que puede fallar un script.
+Se tienen 3 tipos de errores principales, mostrados en el código. Estos generan errores en compilación y runtime, muestran las distintas formas en las que puede fallar un script. Compilar este archivo muestra el error de sintaxis y no genera un ejecutable, y si se corrige este error se genera el de división por 0, etc.
 
 ```c++
 int main(){
@@ -62,7 +61,9 @@ class Program
 
 ---
 
-## gdb (GNU Debugger)
+## Herramientas de depuración de errores 🖥️
+
+### [gdb (GNU Debugger)](https://sourceware.org/gdb/documentation/)
 
 Herramienta de depuración con diversos comandos para correr un script, crear breakpoints, mostrar estados, etc. Para un script con errores en runtime, se tienen los siguientes resultados:
 
@@ -87,7 +88,7 @@ int main() {
 
 ```
 
-Se compila con bandera del debugger "-g" (`g++ -g -o scriptGDB scriptGDB.cpp`) y se depura agregando un breakpoint y revisando variables que generan la excepción, además se muestra la pila de llamadas.
+Se compila con bandera del debugger "-g" (`g++ -g -o scriptGDB scriptGDB.cpp`) y se depura agregando un breakpoint y revisando variables que generan la excepción, además se muestra la pila de llamadas. Se nota que al crear el breakpoint, la ejecución del programa se detiene en ese punto. Además se recibe la lectura correcta del error de división por 0, y se verifica la fuente de error al mostrar el valor de b. Finalmente, la llamada de pilas muestra las funciones iniciadas correctamente.
 
 ```bash
 gdb scriptGDB
@@ -127,7 +128,7 @@ The program no longer exists.
 
 ---
 
-## Valgrind
+### [Valgrind](https://valgrind.org/)
 
 Herramienta para la detección de errores de manejo de memoria y concurrencia. Se tiene el siguiente script con errores de: asignación de memoria no liberada, uso de variables no inicializadas y acceso de memoria fuera de límites. Su principal herramienta es **Memcheck** Para depurar, primero se debe compilar el programa con la bandera -g (`g++ -g -o scriptMemcheck scriptMemcheck.cpp`) y ejecutar valgrind en el archivo (`valgrind --leak-check=yes scriptMemcheck`).
 
@@ -144,7 +145,7 @@ Herramienta para la detección de errores de manejo de memoria y concurrencia. S
     return 0;
 ```
 
-Se detectan los errores de variables no inicializadas, falta de uso de free para un new, etc. Se muestran los resultados de utilizar Valgrind en el script especificado.
+Se detectan los errores de uso de variables no inicializadas, la falta de uso de free para un new, etc. Se muestran los resultados de utilizar Valgrind en el script especificado. 
 
 ```bash
 ==6034== Memcheck, a memory error detector
@@ -216,7 +217,7 @@ Aborted (core dumped)
 
 ---
 
-## AddressSanitizer (ASan)
+### [AddressSanitizer (ASan)](https://github.com/google/sanitizers/wiki/addresssanitizer)
 
 Herramienta que detecta errores de memoria empleando una memoria de llamados/asignaciones incorrectas de memoria. Considerando el siguiente script con uso incorrecto de memoria dinámica:
 
@@ -237,7 +238,7 @@ int main() {
 }
 ```
 
-Se compila con la bandera para el uso de sanitizers de direcciones de memoria (`g++ -fsanitize=address -g -o scriptASan scriptASan.cpp`) y se corre el archivo ejecutable resultante. Esto resulta en el reporte de memoria siguiente:
+Se compila con la bandera para el uso de sanitizers de direcciones de memoria (`g++ -fsanitize=address -g -o scriptASan scriptASan.cpp`) y se corre el archivo ejecutable resultante. Esto resulta en el reporte de memoria siguiente, el cual muestra un heap overflow por la escritura de una dirección fuera de la memoria creada y el uso de una dirección fuera de la región de bytes reservados (correspondiente al uso de memoria ya liberada).
 
 ```bash
 =================================================================
@@ -294,7 +295,7 @@ Shadow byte legend (one shadow byte represents 8 application bytes):
 
 ---
 
-## ThreadSanitizer (TSan)
+### [ThreadSanitizer (TSan)](https://clang.llvm.org/docs/ThreadSanitizer.html)
 
 Similar al sanitizer de direcciones de memoria "ASan", el sanitizer de threads "TSan" permite detectar errores de concurrencia y memoria, pero en programas que emplean hilos de paralelismo. Particularmente se emplean para detectar condiciones de carrera. Con el siguiente script de una función multihilo que puede generar condiciones de carrera:
 
@@ -323,7 +324,7 @@ int main() {
 }
 ```
 
-Se compila el programa con la bandera de sanitizer de threads (`g++ -fsanitize=thread -g -o scriptTSanHelgrind scriptTSanHelgrind.cpp`), y se corre el ejecutable resultante para mostrar los siguientes resultados. **NOTA: En algunos casos se debe reducir la entropía del sistema ASLR para que no se genere un error con el sistema del TSan. Se usa el comando `sudo sysctl vm.mmap_rnd_bits=28` en el caso de WSL.**
+Se compila el programa con la bandera de sanitizer de threads (`g++ -fsanitize=thread -g -o scriptTSanHelgrind scriptTSanHelgrind.cpp`), y se corre el ejecutable resultante para mostrar los siguientes resultados. En el output del programa se señala un data race (condición de carrera) e indica que el thread T2 generó una lectura en la misma dirección de memoria en la que la thread T1 escribió previamente. **NOTA: En algunos casos se debe reducir la entropía del sistema ASLR para que no se genere un error con el sistema del TSan. Se usa el comando `sudo sysctl vm.mmap_rnd_bits=28` en el caso de WSL.**
 
 ```bash
 ==================
@@ -366,9 +367,9 @@ ThreadSanitizer: reported 1 warnings
 
 ---
 
-## Helgrind
+### [Helgrind](https://valgrind.org/docs/manual/hg-manual.html)
 
-Herramienta incluida entre las implementadas por Valgrind, se utiliza para depurar errores de sistemas multihilo propensos a bloqueos, condiciones de carrera y demás. Facilitan la corrección de errores en sistemas difíciles de depurar. Se emplea el mismo script utilizado para la demostración de la herramienta TSan, pero empleando una configuración similar a la utilizada para Valgrind. Se compila el programa con la bandera para incluir información de depuración (`g++ -g -o scriptTsanHelgrind scriptTsanHelgrind.cpp`) y se utiliza la interfaz de Valgrind especificando la herramienta de Helgrind (`valgrind --tool=helgrind ./scriptTsanHelgrind`). Esto genera los resultados siguientes errores indicando posibles condiciones de carrera:
+Herramienta incluida entre las implementadas por Valgrind, se utiliza para depurar errores de sistemas multihilo propensos a bloqueos, condiciones de carrera y demás. Facilitan la corrección de errores en sistemas difíciles de depurar. Se emplea el mismo script utilizado para la demostración de la herramienta TSan, pero empleando una configuración similar a la utilizada para Valgrind. Se compila el programa con la bandera para incluir información de depuración (`g++ -g -o scriptTsanHelgrind scriptTsanHelgrind.cpp`) y se utiliza la interfaz de Valgrind especificando la herramienta de Helgrind (`valgrind --tool=helgrind ./scriptTsanHelgrind`). Esto genera los resultados siguientes errores indicando posibles condiciones de carrera de forma cronológica (primero la creación de los threads y luego las condiciones de carrera). Se muestran diversas condiciones de carreras y el hecho que no se detectaron locks para evitar las condiciones de carrera.
 
 ```bash
 ==6877== Helgrind, a thread error detector

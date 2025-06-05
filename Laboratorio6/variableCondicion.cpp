@@ -1,14 +1,6 @@
 #include <mutex>
 #include <condition_variable>
 
-/*Mecanismos de sincronización comunes
-Variables de condición: Permiten que un hilo espere (bloquee) hasta que otro 
-hilo señale (notifique) que una condición particular se ha cumplido.
-
-- std::condition_variable: Utilizada para esperar y notificar cambios de estado.
-
-*/
-
 std::mutex mtx;
 std::condition_variable cv;
 

@@ -1,33 +1,3 @@
-/*El sistema consta de productores que generan tareas y consumidores que 
-procesan estas tareas. Se utiliza un búfer compartido para almacenar las tareas,
-y se emplean mecanismos de sincronización para asegurar que las tareas se 
-manejen correctamente.*/
-
-/*Definición de constantes y variables compartidas:
-- BUFFER_SIZE: Tamaño del búfer compartido.
-- buffer: Cola que actúa como el búfer compartido.
-- mtx: Mutex para proteger el acceso al búfer.
-- cv_producer, cv_consumer: Variables de condición para notificar a los productores y consumidores.
-- empty_slots, full_slots: Semáforos que controlan el número de slots vacíos y llenos en el búfer.
-
-Función del productor:
-- Produce num_tasks tareas.
-- Espera hasta que haya un slot vacío (empty_slots.acquire()).
-- Entra en la sección crítica, agrega el item al búfer y notifica a un consumidor.
-- Incrementa el contador de slots llenos (full_slots.release()).
-
-Función del consumidor:
-- Ejecuta en un bucle infinito, consumiendo tareas del búfer.
-- Espera hasta que haya un ítem en el búfer (full_slots.acquire()).
-- Entra en la sección crítica, consume el ítem del búfer y notifica a un productor.
-- Incrementa el contador de slots vacíos (empty_slots.release()).
-- Simula el tiempo de procesamiento.
-
-Función principal (main):
-- Crea y lanza hilos de productores y consumidores.
-- Espera a que todos los productores terminen (join).
-- Permite que los consumidores terminen de procesar (sleep).*/
-
 #include <iostream>
 #include <thread>
 #include <vector>

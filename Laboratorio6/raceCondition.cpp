@@ -1,12 +1,6 @@
 #include <iostream>
 #include <vector>
 
-/*Si múltiples hilos ejecutan este bucle simultáneamente, pueden leer
-el mismo valor de counter antes de que se actualice, resultando en
-un conteo incorrecto.
- Sin sincronización, los hilos pueden corromper la estructura interna
-de myList, causando un comportamiento indefinido.*/
-
 int counter = 0;
 
 int main (){

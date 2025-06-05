@@ -1,18 +1,6 @@
 #include <mutex>
 #include <thread>
 
-/*Bloqueo (Lock): Una situación en la que un hilo adquiere un recurso 
-(como un mutex) y evita que otros hilos accedan a ese recurso hasta que sea 
-liberado.
-Propósito: Asegurar que sólo un hilo a la vez pueda ejecutar una sección crítica
-de código para evitar condiciones de carrera.
-Deadlock: Una situación en la que dos o más hilos se bloquean mutuamente y 
-ninguno puede continuar su ejecución porque cada uno está esperando queel otro 
-libere un recurso.
-Características:
-- Ocurre cuando hay dependencia circular entre hilos.
-- Ninguno de los hilos involucrados puede proceder.*/
-
 std::mutex mtx1, mtx2;
 
 // Definir dos mutex que representan dos recursos compartidos.

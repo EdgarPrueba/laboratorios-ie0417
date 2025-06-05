@@ -20,7 +20,8 @@ jobs:
 
     - name: Build and run tests
       run: |
-        mkdir build
+        cd laboratorio8
+        mkdir -p build
         cd build
         cmake ..
         make

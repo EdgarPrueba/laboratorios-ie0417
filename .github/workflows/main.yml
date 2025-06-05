@@ -27,6 +27,7 @@ jobs:
         make
         ./test_calculator
         ./test_authentication
+        ./test_seed
 
   deploy:
     needs: build

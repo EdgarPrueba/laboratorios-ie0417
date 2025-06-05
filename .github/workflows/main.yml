@@ -13,11 +13,10 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
-    - name: Set up CMake
-      uses: lukka/get-cmake@v3.21.2
-
-    - name: Install dependencies
-      run: sudo apt-get update && sudo apt-get install -y build-essential
+    - name: Install dependencies (CMake, Make, GCC, etc.)
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y build-essential cmake
 
     - name: Build and run tests
       run: |
@@ -37,4 +36,4 @@ jobs:
 
     - name: Deploy to production
       run: echo "Deploying to production server"
-      # Acá se agrega el script real para desplegar la aplicación
+      # Aquí se podría agregar un script real de despliegue

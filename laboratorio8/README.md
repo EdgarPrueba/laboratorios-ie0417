@@ -270,7 +270,11 @@ Lo mismo aplica para las pruebas de `Authentication`, donde se valida el inicio 
 
 ## Integración continua con GitHub Actions
 
-Este proyecto implementa una pipeline de integración y entrega continua (CI/CD) utilizando **GitHub Actions**. La acción se ejecuta automáticamente cada vez que se realiza un `push` o se abre un `pull request` hacia la rama `main`.
+[![CI/CD Pipeline](https://github.com/EdgarPrueba/laboratorios-ie0417/actions/workflows/main.yml/badge.svg)](https://github.com/EdgarPrueba/laboratorios-ie0417/actions/workflows/main.yml)
+
+Este proyecto implementa una pipeline de integración y entrega continua (CI/CD) utilizando **GitHub Actions**. El badge anterior muestra el estado más reciente de la ejecución del workflow.
+
+La acción se ejecuta automáticamente cada vez que se realiza un `push` o se abre un `pull request` hacia la rama `main`.
 
 ### Archivo de configuración (`.github/workflows/ci.yml`)
 

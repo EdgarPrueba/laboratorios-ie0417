@@ -25,5 +25,13 @@ target_include_directories(test_authentication PRIVATE
     ${gtest_SOURCE_DIR}/googlemock/include
     ${gtest_SOURCE_DIR}/googletest/include
 )
-
 add_test(NAME test_authentication COMMAND test_authentication)
+
+# test_seed
+add_executable(test_seed test_seed.cpp)
+target_link_libraries(test_seed gtest_main)
+add_test(NAME test_seed COMMAND test_seed)
+
+# main_random (opcional para imprimir)
+add_executable(main_random main_random.cpp)
+
